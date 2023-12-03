@@ -15,6 +15,7 @@ public class Main {
     private static Piece[] targetSequence; // length = WIDTH
 
     private static int currentGuess;
+    private static boolean isInGame;
 
 
     public static void main(String[] args) {
@@ -23,8 +24,12 @@ public class Main {
         System.out.println("==[ MASTER MIND ]==");
         System.out.println("===================");
 
+        // Register shutdown hook
+        registerShutdownHook();
+
         // Generate sequence to guess
         newGame();
+        isInGame = true;
 
         System.out.println("☑ | I've got a new sequence ready in my mind!");
 
@@ -123,6 +128,8 @@ public class Main {
 
         }
 
+        isInGame = false;
+
 
     }
 
@@ -187,6 +194,18 @@ public class Main {
         emojis.append(" (").append(text).append(')');
 
         return emojis.toString();
+    }
+
+    private static void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+            // If the game is in progress, print the solution.
+            if (isInGame) {
+                printGameEnd(false);
+                isInGame = false;
+            }
+
+        }));
     }
 
 
