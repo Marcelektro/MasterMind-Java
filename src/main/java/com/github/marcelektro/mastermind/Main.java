@@ -92,7 +92,7 @@ public class Main {
 
             }
 
-            System.out.println("🤔 | Your guess ("+guessSequence+") result: " +
+            System.out.println("🤔 | Your guess ["+sequenceToString(guess)+"] result: " +
                     "RIGHT SPOT: " + "⬛".repeat(existsRightSpot) + " ("+existsRightSpot+"), " +
                     "WRONG SPOT: " + "⬜".repeat(existsWrongSpot) + " ("+existsWrongSpot+")!");
 
@@ -159,26 +159,39 @@ public class Main {
 
     private static void printResult() {
 
-        for (Piece piece : targetSequence) {
-            System.out.print(piece.string + " ");
-        }
-        System.out.println();
+        System.out.println(sequenceToString(targetSequence));
 
     }
 
+    private static String sequenceToString(Piece[] seq) {
+
+        var emojis = new StringBuilder(seq.length*3 + 3); // emojis (one emoji is 2 chars) + letters + format
+        var text = new StringBuilder(seq.length);
+
+        for (Piece piece : seq) {
+            emojis.append(piece.emoji);
+            text.append(piece.string);
+        }
+
+        emojis.append(" (").append(text).append(')');
+
+        return emojis.toString();
+    }
 
 
     enum Piece {
-        RED("R"),
-        GREEN("G"),
-        BLUE("B"),
-        YELLOW("Y"),
-        ORANGE("O");
+        RED("R", "🔴"),
+        GREEN("G", "🟢"),
+        BLUE("B", "🔵"),
+        YELLOW("Y", "🟡"),
+        ORANGE("O", "🟠");
 
         public final String string;
+        public final String emoji;
 
-        Piece(String string) {
+        Piece(String string, String emoji) {
             this.string = string;
+            this.emoji = emoji;
         }
 
         public static Piece fromChar(char c) {
