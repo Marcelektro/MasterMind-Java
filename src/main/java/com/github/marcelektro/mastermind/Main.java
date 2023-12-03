@@ -59,16 +59,13 @@ public class Main {
             }
 
 
-            int existsRightSpot = 0;
             boolean[] rightSpots = new boolean[WIDTH];
-            int existsWrongSpot = 0;
             boolean[] wrongSpots = new boolean[WIDTH];
 
             for (int t = 0; t < WIDTH; t++) {
                 Piece targetAt = targetSequence[t];
 
                 if (targetAt == guess[t]) {
-                    existsRightSpot++;
                     rightSpots[t] = true;
                     continue;
                 }
@@ -83,7 +80,6 @@ public class Main {
                     }
 
                     if (targetAt == guess[j]) {
-                        existsWrongSpot++;
                         wrongSpots[j] = true;
                         break;
                     }
@@ -92,12 +88,27 @@ public class Main {
 
             }
 
+            int totalRightSpots = 0;
+            int totalWrongSpots = 0;
+
+            for (int i = 0; i < WIDTH; i++) {
+
+                if (rightSpots[i]) {
+                    totalRightSpots++;
+                    continue;
+                }
+
+                if (wrongSpots[i]) {
+                    totalWrongSpots++;
+                }
+            }
+
             System.out.println("🤔 | Your guess ["+sequenceToString(guess)+"] result: " +
-                    "RIGHT SPOT: " + "⬛".repeat(existsRightSpot) + " ("+existsRightSpot+"), " +
-                    "WRONG SPOT: " + "⬜".repeat(existsWrongSpot) + " ("+existsWrongSpot+")!");
+                    "RIGHT SPOT: " + "⬛".repeat(totalRightSpots) + " ("+totalRightSpots+"), " +
+                    "WRONG SPOT: " + "⬜".repeat(totalWrongSpots) + " ("+totalWrongSpots+")!");
 
             // Check win
-            if (existsRightSpot == WIDTH) {
+            if (totalRightSpots == WIDTH) {
                 printGameEnd(true);
                 break;
             }
